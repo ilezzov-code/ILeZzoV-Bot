@@ -6,4 +6,17 @@
   <version>1.0</version>
   <name>Archetype - bot</name>
   <url>http://maven.apache.org</url>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.telegram</groupId>
+      <artifactId>telegrambots-client</artifactId>
+      <version>7.10.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.telegram</groupId>
+      <artifactId>telegrambots-longpolling</artifactId>
+      <version>7.10.0</version>
+    </dependency>
+  </dependencies>
 </project>
