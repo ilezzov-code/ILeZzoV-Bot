@@ -18,7 +18,6 @@ public class Main {
 
     public static void main(String[] args) {
         Tables.checkTables();
-
         try {
             TelegramBotsLongPollingApplication botsApplication = new TelegramBotsLongPollingApplication();
             botsApplication.registerBot(BotInfo.botToken, new StartEvent());

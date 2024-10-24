@@ -20,16 +20,25 @@ public class DatabaseMethods {
         }
     }
 
-    public static void newUser(Long userId, String activation) {
+    public static void newUser(Long userId, String[] activation) {
         try {
-            connection.createStatement().execute(STR."INSERT INTO users VALUES ('\{userId}', 'default', 'start', '1')");
+            connection.createStatement().execute(STR."INSERT INTO users VALUES ('\{userId}', 'default', 'start', '1', 0)");
 
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO statsNewUsers VALUES (?, ?, ?)");
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO statsNewUsers VALUES (?, ?, ?, ?)");
             preparedStatement.setLong(1, userId);
-            preparedStatement.setString(2, activation);
-            preparedStatement.setString(3, new Date().toString());
+            preparedStatement.setString(2, activation[0]);
+            preparedStatement.setString(3, activation[1]);
+            preparedStatement.setString(4, new Date().toString());
 
             preparedStatement.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static void updateMessageId(Long userId, Integer messageId) {
+        try {
+            connection.createStatement().execute(STR."UPDATE users SET messageId = \{messageId} WHERE userId = \{userId}");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -45,6 +54,7 @@ public class DatabaseMethods {
             throw new RuntimeException(e);
         }
     }
+
 
     public static ResultSet getAdmins() {
         try {
@@ -73,6 +83,28 @@ public class DatabaseMethods {
     public static void enableMailing(Long userId) {
         try {
             connection.createStatement().execute(STR."UPDATE users SET canMailing = '1' WHERE userId = '\{userId}'");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Integer getMessageId(Long userId) {
+        try {
+            ResultSet messageId = connection.createStatement().executeQuery(STR."SELECT messageId FROM users WHERE userId = '\{userId}'");
+            messageId.next();
+
+            return messageId.getInt(1);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static Integer getMailingStatus(Long userId) {
+        try {
+            ResultSet mailingStatus = connection.createStatement().executeQuery(STR."SELECT canMailing FROM users WHERE userId = '\{userId}'");
+            mailingStatus.next();
+
+            return mailingStatus.getInt(1);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

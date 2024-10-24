@@ -9,10 +9,11 @@ import org.telegram.telegrambots.meta.api.objects.message.Message;
 
 
 public class StartEvent implements LongPollingSingleThreadUpdateConsumer {
+
     @Override
     public void consume(Update update) {
         Message message = update.getMessage();
-        Long userId = message.getChatId();
+        Long userId = getUserId(update);
 
         if(!DatabaseMethods.checkUser(userId)) {
             DatabaseMethods.newUser(userId, Messages.getActivation(update));
@@ -30,7 +31,16 @@ public class StartEvent implements LongPollingSingleThreadUpdateConsumer {
         if (update.hasCallbackQuery()) {
             switch (flag) {
                 case "start": Executor.startExecuteKeyboard(update);
+                case "channelList": Executor.channelsListExecuteKeyboard(update);
+                case "clubBs": Executor.clubBsExecuteKeyboard(update);
+                case "contact": Executor.contactExecuteKeyboard(update);
+                case "mailing": Executor.mailingExecuteKeyboard(update);
             }
         }
+    }
+    public Long getUserId(Update update) {
+        if (update.hasMessage())
+            return update.getMessage().getChatId();
+        return update.getCallbackQuery().getFrom().getId();
     }
 }

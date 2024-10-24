@@ -18,7 +18,8 @@ public class Tables {
                     "userId BIGINT, " +
                     "staff_group TEXT, " +
                     "flag TEXT, " +
-                    "canMailing BIGINT " +
+                    "canMailing BIGINT, " +
+                    "messageId BIGINT " +
                     ")");
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -29,7 +30,8 @@ public class Tables {
         try {
             connection.createStatement().execute("CREATE TABLE IF NOT EXISTS statsNewUsers (" +
                     "userId BIGINT, " +
-                    "activation TEXT, " +
+                    "activationType TEXT, " +
+                    "activationData TEXT, " +
                     "date TEXT " +
                     ")");
         } catch (SQLException e) {
